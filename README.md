@@ -1,73 +1,140 @@
-# Welcome to your Lovable project
+---
 
-## Project info
+# 🛡️ MailInsight — Secure AI Email Threat Detection
 
-**URL**: https://lovable.dev/projects/cabfbb25-3ebb-4fd1-85dd-f0234a3b93cd
+MailInsight is a **security-first email threat detection platform**. It analyzes emails in real time for phishing, spoofing, malicious links, and impersonation, while maintaining strict user data privacy and safe authentication.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 🔥 Security-Focused Features
 
-**Use Lovable**
+### ✅ **Privacy & Data Protection**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/cabfbb25-3ebb-4fd1-85dd-f0234a3b93cd) and start prompting.
+* No passwords stored in MailInsight — uses **OAuth tokens only**.
+* Email content is scanned **server-side** using **Supabase Edge Functions**.
+* Logs and analytics do **not store sensitive information**.
 
-Changes made via Lovable will be committed automatically to this repo.
+### ✅ **Secure Authentication**
 
-**Use your preferred IDE**
+* Supabase Auth with **email/password** and **Google OAuth 2.0**.
+* Tokens stored securely in browser session storage.
+* Supports **redirect URI validation** to prevent phishing.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### ✅ **Gmail API Integration**
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+* Users grant **limited access** via OAuth.
+* Only metadata and message content needed for threat detection are accessed.
+* No permanent storage of Gmail credentials.
 
-Follow these steps:
+### ✅ **Serverless & Edge Security**
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+* AI scanning runs in **Supabase Edge Functions**.
+* Functions execute close to the user and follow **role-based access policies**.
+
+### ✅ **Secure Frontend**
+
+* React + TypeScript + Tailwind CSS with **strict input validation**.
+* All links, redirects, and third-party requests are sanitized.
+* Components designed with **least privilege principle** in mind.
+
+---
+
+## 🔧 Installation & Security Guidelines
+
+### 1️⃣ Clone & install
+
+```bash
 git clone <YOUR_GIT_URL>
+cd mailinsight
+npm install
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### 2️⃣ Environment variables (do **not** commit!)
 
-# Step 3: Install the necessary dependencies.
-npm i
+Create `.env.local`:
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```ini
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your_anon_key
+
+VITE_GOOGLE_CLIENT_ID=your_google_client_id
+VITE_GOOGLE_REDIRECT_URI=http://localhost:5173/auth/callback
+```
+
+> Never commit `.env.local`. Use `.gitignore` to prevent accidental leaks.
+
+### 3️⃣ Start locally
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+---
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📨 Gmail API & OAuth Security
 
-**Use GitHub Codespaces**
+1. Enable **Gmail API** in Google Cloud Console.
+2. Configure **OAuth 2.0 Client**.
+3. Add **only authorized redirect URIs**:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```
+http://localhost:5173/auth/callback
+https://<your-supabase>.supabase.co/auth/v1/callback
+```
 
-## What technologies are used for this project?
+4. Use HTTPS in production to prevent token interception.
+5. Tokens are exchanged **server-side**, never exposed to public.
 
-This project is built with:
+> Misconfigured redirect URIs cause `Error 400: redirect_uri_mismatch`.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+---
 
-## How can I deploy this project?
+## 🔐 Supabase Edge Function Security
 
-Simply open [Lovable](https://lovable.dev/projects/cabfbb25-3ebb-4fd1-85dd-f0234a3b93cd) and click on Share -> Publish.
+* Located in `/supabase/functions/analyze-email/index.ts`.
+* Deploy using:
 
-## Can I connect a custom domain to my Lovable project?
+```bash
+supabase functions deploy analyze-email --project-ref <PROJECT_REF>
+```
 
-Yes, you can!
+* Run locally:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```bash
+supabase functions serve analyze-email
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+* Ensure **RLS (Row-Level Security)** is enabled on Postgres tables.
+* Validate all inputs before sending them to the AI model.
+
+---
+
+## 🚀 Deployment Best Practices
+
+* Serve via HTTPS only.
+* Use environment variables for API keys.
+* Configure CSP, XSS, and CORS policies in production.
+* Regularly audit Supabase Edge functions and database roles.
+
+---
+
+## 👥 Team
+
+MailInsight is developed by a dedicated cybersecurity team with strong focus on **privacy, security, and ethical AI usage**.
+
+---
+
+## 🤝 Contributing Securely
+
+1. Fork the repo.
+2. Create feature branch.
+3. Keep secrets out of commits.
+4. Submit pull requests for review.
+
+---
+
+## 📄 License
+
+MIT License — safe for personal and commercial use.
+
+---
