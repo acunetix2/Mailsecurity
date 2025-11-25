@@ -10,7 +10,7 @@ export default function Authcallback() {
     const handleOAuthRedirect = async () => {
       try {
         // This parses the OAuth response from URL
-        const { data: { session }, error } = await supabase.auth.getSessionFromUrl({ storeSession: true });
+        const { data: { session }, error } = await supabase.auth.getSession();
 
         if (error) {
           console.error("OAuth callback error:", error.message);
