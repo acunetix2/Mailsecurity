@@ -55,7 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       });
 
       if (error) {
-        toast.error("login unsuccessful, please try again");
+        toast.error(error.message);
         return { error };
       }
 
@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       });
 
       if (error) {
-        toast.error("signup unsucessful, please try again after 5 minutes");
+        toast.error(error.message);
         return { error };
       }
 
@@ -98,7 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: "https://mail-insight-v2.vercel.app",
+          redirectTo: `${window.location.origin}/dashboard`,
           scopes: "https://www.googleapis.com/auth/gmail.readonly",
         },
       });
