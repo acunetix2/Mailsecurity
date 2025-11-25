@@ -12,9 +12,9 @@ export default function Authcallback() {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate("/dashboard"); // redirect after login
+        navigate("/dashboard"); 
       } else {
-        navigate("/login"); // fallback if something goes wrong
+        navigate("/auth"); 
       }
     };
     checkSession();
