@@ -54,7 +54,7 @@ const About = () => {
       id: "team",
       icon: Users,
       title: "The CyberKnights Team",
-      content: "MailInsight is developed by CyberKnights, a collective of cybersecurity researchers, AI engineers, and full-stack developers united by a passion for digital safety. Our team brings together expertise from leading tech companies, academic research institutions, and cybersecurity firms. We've worked on everything from threat intelligence platforms to machine learning systems, and we're applying that knowledge to solve one of the internet's most persistent problems: email security."
+      content: "MailInsight is developed by CyberKnights, a collective of Jomo Kenyatta University Students united by a passion for digital safety. Our team brings together expertise from leading tech companies, academic research institutions, and cybersecurity firms. We've worked on everything from threat intelligence platforms to machine learning systems, and we're applying that knowledge to solve one of the internet's most persistent problems: email security."
     },
     {
       id: "innovation",
@@ -305,7 +305,9 @@ const About = () => {
             <p className="text-xl text-orange-100 mb-10 leading-relaxed">
               Join users who trust MailInsight to protect their email communications every day.
             </p>
-            <button className="bg-white text-orange-600 px-10 py-4 rounded-full font-semibold text-lg hover:bg-orange-50 transition-all shadow-xl hover:shadow-2xl hover:scale-105 transform">
+            <button className="bg-white text-orange-600 px-10 py-4 rounded-full font-semibold text-lg hover:bg-orange-50 transition-all shadow-xl hover:shadow-2xl hover:scale-105 transform"
+				onClick={() => (window.location.href = "/auth")}
+			>
               Get Started Free
             </button>
           </div>
@@ -357,7 +359,7 @@ const About = () => {
               <span className="text-xl font-bold text-white">MailInsight</span>
             </div>
             <p className="text-sm text-gray-500">
-              © 2024 MailInsight. Powered by <span className="text-orange-500 font-semibold">CyberKnights Team</span>. All rights reserved.
+              © 2025 MailInsight. Powered by <span className="text-orange-500 font-semibold">CyberKnights Team</span>. All rights reserved.
             </p>
           </div>
         </div>

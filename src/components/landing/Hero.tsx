@@ -7,13 +7,13 @@ export const Hero: React.FC = () => {
       {/* Left: Text Content */}
       <div className="md:w-1/2">
         <h1 className="text-3xl md:text-4xl font-bold text-orange-400 mb-4">
-          Welcome to <span className="italic text-orange-500">MailInsight®</span> : Email Defence
+          Welcome to <span className="italic text-orange-500">MailInsight®</span> : AI-Powered Email Security
         </h1>
         <h2 className="text-xl md:text-2xl font-semibold text-orange-400 mb-6">
           where we protect your data
         </h2>
         <p className="text-white-600 text-md leading-relaxed">
-          <span className="italic text-white-600">An AI-powered browser extension</span> designed to protect users from phishing and email scams as they happen.
+          <span className="italic text-white-600">An AI-powered tool </span> designed to protect users from phishing and email scams as they happen.
           MailInsight scans your emails in real-time, providing instant alerts and recommendations to keep your inbox safe.
           With advanced threat detection, it identifies suspicious links, verifies sender authenticity, and offers personalized security tips.
           Whether you're using Gmail, Outlook, or any other email service, MailInsight seamlessly integrates to enhance your email security.

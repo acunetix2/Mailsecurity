@@ -130,8 +130,8 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
-                  <a href="mailto:support@mailinsight.com" className="text-gray-600 hover:text-orange-600 transition-colors">
-                    support@mailinsight.com
+                  <a href="mailto:mailinsightsupport@gmail.com" className="text-gray-600 hover:text-orange-600 transition-colors">
+                    mailinsightsupport@gmail.com
                   </a>
                   <p className="text-sm text-gray-500 mt-1">For general inquiries</p>
                 </div>
@@ -143,10 +143,10 @@ const Contact = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
-                  <a href="tel:+1234567890" className="text-gray-600 hover:text-orange-600 transition-colors">
-                    +1 (234) 567-890
+                  <a href="tel:+254703378332" className="text-gray-600 hover:text-orange-600 transition-colors">
+                    +254 703 378 332
                   </a>
-                  <p className="text-sm text-gray-500 mt-1">Mon-Fri, 9am-6pm EST</p>
+                  <p className="text-sm text-gray-500 mt-1">Mon-Fri, 9am-5pm GMT</p>
                 </div>
               </div>
 
@@ -157,9 +157,9 @@ const Contact = () => {
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-1">Office</h3>
                   <p className="text-gray-600">
-                    123 Security Street<br />
-                    Tech Valley, CA 94000<br />
-                    United States
+                    348 Moi Avenue<br />
+                    Nairobi City, KE 00100<br />
+                    Kenya
                   </p>
                 </div>
               </div>
@@ -172,7 +172,7 @@ const Contact = () => {
                   <h3 className="font-semibold text-gray-900 mb-1">Business Hours</h3>
                   <p className="text-gray-600">
                     Monday - Friday<br />
-                    9:00 AM - 6:00 PM EST<br />
+                    9:00 AM - 5:00 PM GMT<br />
                     Weekend: Closed
                   </p>
                 </div>
@@ -182,7 +182,7 @@ const Contact = () => {
             {/* Team Credit */}
             <div className="mt-12 p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border border-orange-200">
               <p className="text-sm text-gray-700 text-center">
-                Built with ❤️ by<br />
+                Built by<br />
                 <span className="font-bold text-orange-600 text-lg">CyberKnights Team</span>
               </p>
             </div>
@@ -220,7 +220,7 @@ const Contact = () => {
                           ? "border-red-300 focus:ring-red-500"
                           : "border-gray-300 focus:ring-orange-500"
                       }`}
-                      placeholder="John Doe"
+                      placeholder="Your Name"
                     />
                     {errors.name && (
                       <p className="mt-1 text-sm text-red-600 flex items-center gap-1">
@@ -245,7 +245,7 @@ const Contact = () => {
                           ? "border-red-300 focus:ring-red-500"
                           : "border-gray-300 focus:ring-orange-500"
                       }`}
-                      placeholder="john@example.com"
+                      placeholder="Your email"
                     />
                     {errors.email && (
                       <p className="mt-1 text-sm text-red-600 flex items-center gap-1">

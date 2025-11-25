@@ -55,7 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       });
 
       if (error) {
-        toast.error(error.message);
+        toast.error("login unsuccessful, please try again");
         return { error };
       }
 
@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       });
 
       if (error) {
-        toast.error(error.message);
+        toast.error("signup unsucessful, please try again after 5 minutes");
         return { error };
       }
 

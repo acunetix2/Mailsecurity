@@ -139,7 +139,7 @@ const Auth = () => {
                 <Input
                   id="signin-email"
                   type="email"
-                  placeholder="your@example.com"
+                  placeholder="Enter your email"
                   className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-orange-600 focus:ring-orange-600"
                   {...signInForm.register("email")}
                 />
@@ -196,7 +196,7 @@ const Auth = () => {
                 <Input
                   id="signup-email"
                   type="email"
-                  placeholder="your@example.com"
+                  placeholder="Enter your email"
                   className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-orange-600 focus:ring-orange-600"
                   {...signUpForm.register("email")}
                 />

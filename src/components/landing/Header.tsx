@@ -163,8 +163,11 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-4">
           <Button
             variant="ghost"
+			target="_blank"
+			rel="noopener"
+			href = "https://chrome.google.com/webstore/detail/mailinsight-extension-link"
             className="hidden sm:inline-flex bg-orange-400 text-black rounded-full px-6 hover:bg-orange-500"
-            onClick={() => (window.location.href = "/auth")}
+            onClick={() => (window.location.href = "https://chrome.google.com/webstore/detail/mailinsight-extension-link")}
           >
             INSTALL
           </Button>
