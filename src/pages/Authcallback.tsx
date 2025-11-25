@@ -1,4 +1,3 @@
-// src/pages/AuthCallback.tsx
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,21 +6,21 @@ export default function AuthCallback() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleOAuthRedirect = async () => {
+    const checkSession = async () => {
       try {
-        // Parse OAuth URL and store session
-        const { data, error } = await supabase.auth.getSessionFromUrl({ storeSession: true });
-        
+        // This will return the current session, including after OAuth redirect
+        const { data: { session }, error } = await supabase.auth.getSession();
+
         if (error) {
           console.error("OAuth callback error:", error.message);
-          navigate("/auth"); // fallback
+          navigate("/auth");
           return;
         }
 
-        if (data.session) {
-          navigate("/dashboard"); // success
+        if (session) {
+          navigate("/dashboard");
         } else {
-          navigate("/auth"); // fallback
+          navigate("/auth");
         }
       } catch (err) {
         console.error("Unexpected OAuth error:", err);
@@ -29,7 +28,7 @@ export default function AuthCallback() {
       }
     };
 
-    handleOAuthRedirect();
+    checkSession();
   }, [navigate]);
 
   return <div>Loading...</div>;
