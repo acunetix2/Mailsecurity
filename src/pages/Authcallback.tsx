@@ -1,3 +1,4 @@
+// src/pages/AuthCallback.tsx
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,8 +9,8 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleOAuthRedirect = async () => {
       try {
-        // Parse the OAuth response from the URL and store session
-        const { data, error } = await supabase.auth.getSessionFromUrl({ storeSession: true });
+        // v2 reads the session automatically from URL if detectSessionInUrl=true
+        const { data: { session }, error } = await supabase.auth.getSession();
 
         if (error) {
           console.error("OAuth callback error:", error.message);
@@ -17,7 +18,7 @@ export default function AuthCallback() {
           return;
         }
 
-        if (data.session) {
+        if (session) {
           navigate("/dashboard");
         } else {
           navigate("/auth");
