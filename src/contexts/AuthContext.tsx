@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (err: any) {
       console.error("OAuth callback error:", err);
       toast.error("Failed to sign in with Google");
-      navigate("/login");
+      navigate("/auth");
     }
   };
 
