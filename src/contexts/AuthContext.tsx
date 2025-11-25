@@ -114,7 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      navigate("/");
+      navigate("/auth");
       toast.success("Signed out successfully");
     } catch (error: any) {
       console.error("Sign out error:", error);
