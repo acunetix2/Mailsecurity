@@ -6,10 +6,10 @@ export default function AuthCallback() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkSession = async () => {
+    const handleOAuthRedirect = async () => {
       try {
-        // This will return the current session, including after OAuth redirect
-        const { data: { session }, error } = await supabase.auth.getSession();
+        // Parse the OAuth response from the URL and store session
+        const { data, error } = await supabase.auth.getSessionFromUrl({ storeSession: true });
 
         if (error) {
           console.error("OAuth callback error:", error.message);
@@ -17,7 +17,7 @@ export default function AuthCallback() {
           return;
         }
 
-        if (session) {
+        if (data.session) {
           navigate("/dashboard");
         } else {
           navigate("/auth");
@@ -28,7 +28,7 @@ export default function AuthCallback() {
       }
     };
 
-    checkSession();
+    handleOAuthRedirect();
   }, [navigate]);
 
   return <div>Loading...</div>;
