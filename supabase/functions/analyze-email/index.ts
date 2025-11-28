@@ -135,7 +135,7 @@ Content: ${emailData.content.substring(0, 2000)}`
     }
 
     console.log("Inserting analysis result into Supabase...");
-    const { data: scanResult, error: dbError } = await supabaseClient
+     const { data: scanResult, error: dbError } = await supabaseClient
       .from("email_scans")
       .insert({
         user_id: emailData.userId,
@@ -145,28 +145,34 @@ Content: ${emailData.content.substring(0, 2000)}`
         sender_email: emailData.senderEmail,
         preview: emailData.content.substring(0, 200),
         received_date: emailData.receivedDate,
-        risk_score: analysis.riskScore.toString(),
+        risk_score: analysis.riskScore,
         risk_level: analysis.riskLevel,
-        threat_indicators: JSON.stringify(analysis.threatIndicators),
+        threat_indicators: analysis.threatIndicators,
         analysis_summary: analysis.analysisSummary,
-        content_preview: emailData.content.substring(0, 500),
-        has_attachments: emailData.hasAttachments.toString(),
+        is_read: false,
       })
       .select()
       .single();
 
-    if (dbError) throw dbError;
+    if (dbError) {
+      console.error("Database insert failed:", dbError);
+      return new Response(
+        JSON.stringify({ error: "Failed to save scan result" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
-    console.log("Email analysis stored successfully:", scanResult.id);
-    return new Response(JSON.stringify(scanResult), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 200,
-    });
+    console.log("Scan saved with ID:", scanResult.id);
 
-  } catch (error) {
-    console.error("Error in analyze-email function:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ success: true, scan: scanResult }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    );
+
+  } catch (err) {
+    console.error("Unhandled error:", err);
+    return new Response(
+      JSON.stringify({ error: err.message || "Internal server error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
