@@ -23,11 +23,15 @@ const EmailAnalysisSchema = z.object({
 type EmailAnalysisRequest = z.infer<typeof EmailAnalysisSchema>;
 
 serve(async (req) => {
+  console.log("Request received:", req.method, req.url);
+
   if (req.method === "OPTIONS") {
+    console.log("OPTIONS preflight request, returning headers.");
     return new Response(null, { headers: corsHeaders });
   }
 
   if (req.method !== "POST") {
+    console.warn("Invalid method:", req.method);
     return new Response(
       JSON.stringify({ error: "Method not allowed" }),
       { status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -35,7 +39,7 @@ serve(async (req) => {
   }
 
   try {
-    // Parse and validate request body
+    console.log("Parsing request body...");
     const body = await req.json();
     const parsed = EmailAnalysisSchema.safeParse(body);
 
@@ -52,15 +56,15 @@ serve(async (req) => {
     }
 
     const emailData = parsed.data;
-    console.log("Analyzing email for user:", emailData.userId);
+    console.log("Validated request, analyzing email for user:", emailData.userId);
 
-    // Supabase client with service role key
+    // Supabase client
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Verify user exists
+    console.log("Fetching user profile from Supabase...");
     const { data: profile, error: profileError } = await supabaseClient
       .from("profiles")
       .select("*")
@@ -68,17 +72,20 @@ serve(async (req) => {
       .single();
 
     if (profileError || !profile) {
+      console.error("User profile not found:", profileError);
       return new Response(
         JSON.stringify({ error: "User profile not found" }),
         { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+    console.log("User profile found:", profile.id);
 
-    // OpenAI integration
+    // OpenAI
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     if (!OPENAI_API_KEY) throw new Error("OPENAI_API_KEY not set");
-
     const client = new OpenAI({ apiKey: OPENAI_API_KEY });
+
+    console.log("Calling OpenAI API for analysis...");
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
@@ -102,7 +109,7 @@ Content: ${emailData.content.substring(0, 2000)}`
       ],
     });
 
-    // Parse AI response safely
+    console.log("OpenAI response received, parsing...");
     const analysisText = completion.choices[0]?.message?.content || "";
     let analysis;
     try {
@@ -117,7 +124,8 @@ Content: ${emailData.content.substring(0, 2000)}`
           analysisSummary: analysisText.substring(0, 500),
         };
       }
-    } catch {
+    } catch (err) {
+      console.error("Failed to parse AI response:", err);
       analysis = {
         riskScore: 15,
         riskLevel: "safe",
@@ -126,32 +134,30 @@ Content: ${emailData.content.substring(0, 2000)}`
       };
     }
 
-    // Insert result into Supabase
-	const { data: scanResult, error: dbError } = await supabaseClient
-	  .from("email_scans")
-	  .insert({
-		user_id: emailData.userId,
-		email_id: emailData.emailId,
-		subject: emailData.subject,
-		sender: emailData.sender,
-		sender_email: emailData.senderEmail,
-		preview: emailData.content.substring(0, 200),
-		received_date: emailData.receivedDate,
-		risk_score: analysis.riskScore.toString(),                      
-		risk_level: analysis.riskLevel,
-		threat_indicators: JSON.stringify(analysis.threatIndicators),   
-		analysis_summary: analysis.analysisSummary,
-		content_preview: emailData.content.substring(0, 500),
-		has_attachments: emailData.hasAttachments.toString(),           
-	  })
-	  .select()
-	  .single();
-
+    console.log("Inserting analysis result into Supabase...");
+    const { data: scanResult, error: dbError } = await supabaseClient
+      .from("email_scans")
+      .insert({
+        user_id: emailData.userId,
+        email_id: emailData.emailId,
+        subject: emailData.subject,
+        sender: emailData.sender,
+        sender_email: emailData.senderEmail,
+        preview: emailData.content.substring(0, 200),
+        received_date: emailData.receivedDate,
+        risk_score: analysis.riskScore.toString(),
+        risk_level: analysis.riskLevel,
+        threat_indicators: JSON.stringify(analysis.threatIndicators),
+        analysis_summary: analysis.analysisSummary,
+        content_preview: emailData.content.substring(0, 500),
+        has_attachments: emailData.hasAttachments.toString(),
+      })
+      .select()
+      .single();
 
     if (dbError) throw dbError;
 
-    console.log("Email analysis stored:", scanResult.id);
-
+    console.log("Email analysis stored successfully:", scanResult.id);
     return new Response(JSON.stringify(scanResult), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
@@ -161,10 +167,7 @@ Content: ${emailData.content.substring(0, 2000)}`
     console.error("Error in analyze-email function:", error);
     return new Response(
       JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });
