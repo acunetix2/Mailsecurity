@@ -1,7 +1,7 @@
 project_id = "xzwbjwydzzlbqwpsnkew"
 
 [functions.analyze-email]
-verify_jwt = true
+verify_jwt = false
 
 [functions.sync-gmail]
 verify_jwt = true
